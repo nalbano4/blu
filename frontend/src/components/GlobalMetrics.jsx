@@ -8,12 +8,23 @@ function GlobalMetrics({ period = 12 }) {
   const [error, setError] = useState(null)
   const [showYoY, setShowYoY] = useState(false) // Toggle state: false = P/P, true = YoY
 
+  // Get the appropriate API base URL for environment
+  const getApiBaseUrl = () => {
+    // In production, use relative URLs which will automatically use the same domain
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000'
+    }
+    // For production, use relative URL or the production domain
+    return ''  // Empty string means relative to current domain
+  }
+
   // Fetch data from backend
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`http://localhost:5000/api/media-performance/global-metrics?period=${period}`)
+        const apiBaseUrl = getApiBaseUrl()
+        const response = await fetch(`${apiBaseUrl}/api/media-performance/global-metrics?period=${period}`)
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)

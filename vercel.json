@@ -5,12 +5,17 @@
     { "src": "backend/server.js", "use": "@vercel/node", "config": { "includeFiles": "backend/data/**" } }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/server.js" },
+    { "src": "^/api/(.*)$", "dest": "/backend/server.js" },
 
+    
+    { "src": "^/assets/(.*)$", "dest": "/frontend/assets/$1" },
+    { "src": "^/favicon\\.ico$", "dest": "/frontend/favicon.ico" },
+    { "src": "^/manifest\\.webmanifest$", "dest": "/frontend/manifest.webmanifest" },
+    
     { "handle": "filesystem" },
 
-
-    { "src": "/(.*)", "dest": "/frontend/index.html" }
+    
+    { "src": ".*", "dest": "/frontend/index.html" }
   ],
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
   "buildCommand": "cd frontend && npm run build"

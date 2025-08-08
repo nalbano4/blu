@@ -20,10 +20,7 @@
   ],
   "functions": {
     "backend/server.js": {
-      "includeFiles": [
-        "backend/data/**",
-        "backend/routes/**"
-      ]
+      "includeFiles": "backend/data/**"
     }
   },
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",

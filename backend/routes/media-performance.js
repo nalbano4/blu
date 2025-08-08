@@ -4,6 +4,7 @@ const Papa = require('papaparse');
 const fs = require('fs').promises;
 const _ = require('lodash');
 const router = express.Router();
+const path = require('path');
 
 // Generate stock-style ticker from partner name
 function generateTicker(partnerName) {
@@ -115,21 +116,24 @@ function addYearWeek(row) {
 let cachedData = null;
 async function loadData() {
   if (cachedData) return cachedData;
-  
-  const fileContent = await fs.readFile('./data/mediacontribution.csv', 'utf8');
+
+  // Resolve: backend/routes -> .. -> data/mediacontribution.csv
+  const dataPath = path.resolve(__dirname, '..', 'data', 'mediacontribution.csv');
+
+  const fileContent = await fs.readFile(dataPath, 'utf8');
   const parsed = Papa.parse(fileContent, {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true
   });
-  
-  // Add year, week fields and sort by date
+
   cachedData = parsed.data
     .map(addYearWeek)
     .sort((a, b) => a.yearWeek.localeCompare(b.yearWeek));
-  
+
   return cachedData;
 }
+
 
 // Filter data by period (last N weeks)
 function filterByPeriod(data, weeks) {

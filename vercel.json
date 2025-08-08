@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "blu-performance-dashboard",
   "builds": [
     {
       "src": "frontend/package.json",
@@ -9,16 +8,15 @@
     },
     {
       "src": "backend/server.js",
-      "use": "@vercel/node",
-      "config": { "includeFiles": "backend/data/**" }
+      "use": "@vercel/node"
     }
   ],
-  "outputDirectory": "frontend/dist",
   "routes": [
     { "src": "/api/(.*)", "dest": "/backend/server.js" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
-  "buildCommand": "cd frontend && npm run build"
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist"
 }

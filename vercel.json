@@ -6,20 +6,8 @@
   ],
   "routes": [
     { "src": "^/api/(.*)$", "dest": "/backend/server.js" },
-
-
-    { "src": "^/assets/(.*)$", "dest": "/frontend/assets/$1" },
-    { "src": "^/favicon\\.ico$", "dest": "/frontend/favicon.ico" },
-    { "src": "^/manifest\\.webmanifest$", "dest": "/frontend/manifest.webmanifest" },
-
-
-    { "src": "^/logos/(.*)$", "dest": "/frontend/logos/$1" },
-    { "src": "^/banners/(.*)$", "dest": "/frontend/banners/$1" },
-
     { "handle": "filesystem" },
-
-
-    { "src": ".*", "dest": "/frontend/index.html" }
+    { "src": ".*", "dest": "/index.html" }
   ],
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
   "buildCommand": "cd frontend && npm run build"

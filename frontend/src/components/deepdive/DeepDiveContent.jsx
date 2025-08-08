@@ -1,4 +1,4 @@
-// Metric options for secondary axis// components/deepdive/DeepDiveContent.jsx
+// components/deepdive/DeepDiveContent.jsx
 import { Box, Text, VStack, HStack, Grid, Spinner, Alert, AlertIcon, Select, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
 import { ComposedChart, Area, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { useState, useEffect } from 'react'
@@ -9,6 +9,16 @@ function DeepDiveContent({ activeTab, selectedPartner, period, selectedChannel }
   const [error, setError] = useState(null)
   const [secondaryMetric, setSecondaryMetric] = useState('none')
   const [sortConfig, setSortConfig] = useState({ key: 'rawDate', direction: 'asc' })
+
+  // Get the appropriate API base URL for environment
+  const getApiBaseUrl = () => {
+    // In production, use relative URLs which will automatically use the same domain
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000'
+    }
+    // For production, use relative URL or the production domain
+    return ''  // Empty string means relative to current domain
+  }
 
   // Sorting functionality
   const handleSort = (key) => {
@@ -48,6 +58,8 @@ function DeepDiveContent({ activeTab, selectedPartner, period, selectedChannel }
     }
     return sortConfig.direction === 'asc' ? ' ↑' : ' ↓'
   }
+
+  // Metric options for secondary axis
   const metricOptions = [
     { value: 'none', label: 'None', format: () => '' },
     { value: 'spend', label: 'Spend', format: (val) => `${(val / 1000).toFixed(0)}K` },
@@ -68,8 +80,9 @@ function DeepDiveContent({ activeTab, selectedPartner, period, selectedChannel }
       setLoading(true)
       setError(null)
       
+      const apiBaseUrl = getApiBaseUrl()
       const response = await fetch(
-        `http://localhost:5000/api/media-performance/trends?period=${period}&groupBy=partner`
+        `${apiBaseUrl}/api/media-performance/trends?period=${period}&groupBy=partner`
       )
       
       if (!response.ok) {

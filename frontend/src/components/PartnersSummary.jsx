@@ -12,6 +12,16 @@ function PartnersSummary({ selectedPeriod = 12, selectedChannel, selectedPartner
   const [error, setError] = useState(null)
   const [comparisonMode, setComparisonMode] = useState('pop') // 'pop' or 'yoy'
 
+  // Get the appropriate API base URL for environment
+  const getApiBaseUrl = () => {
+    // In production, use relative URLs which will automatically use the same domain
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000'
+    }
+    // For production, use relative URL or the production domain
+    return ''  // Empty string means relative to current domain
+  }
+
   useEffect(() => {
     fetchPartners()
   }, [selectedPeriod, comparisonMode])
@@ -21,8 +31,9 @@ function PartnersSummary({ selectedPeriod = 12, selectedChannel, selectedPartner
       setLoading(true)
       console.log('Fetching partners for period:', selectedPeriod, 'comparison:', comparisonMode)
       
+      const apiBaseUrl = getApiBaseUrl()
       const response = await fetch(
-        `http://localhost:5000/api/media-performance/partners?period=${selectedPeriod}&comparison=${comparisonMode}`
+        `${apiBaseUrl}/api/media-performance/partners?period=${selectedPeriod}&comparison=${comparisonMode}`
       )
       
       if (!response.ok) {

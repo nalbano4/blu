@@ -1,13 +1,18 @@
 {
   "version": 2,
   "builds": [
-    { "src": "frontend/dist/**", "use": "@vercel/static" },
+    { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
     { "src": "backend/server.js", "use": "@vercel/node", "config": { "includeFiles": "backend/data/**" } }
   ],
   "routes": [
-    { "src": "^/api/(.*)$", "dest": "/backend/server.js" },
+    { "src": "/api/(.*)", "dest": "/backend/server.js" },
+
+    { "src": "/(.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|json|txt|css|js))", "dest": "/frontend/$1" },
+    { "src": "/assets/(.*)", "dest": "/frontend/assets/$1" },
+
     { "handle": "filesystem" },
-    { "src": ".*", "dest": "/index.html" }
+
+    { "src": "/(.*)", "dest": "/frontend/index.html" }
   ],
   "installCommand": "cd frontend && npm install && cd ../backend && npm install",
   "buildCommand": "cd frontend && npm run build"
